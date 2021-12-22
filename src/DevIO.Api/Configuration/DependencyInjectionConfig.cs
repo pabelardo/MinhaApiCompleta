@@ -1,4 +1,5 @@
-﻿using DevIO.Business.Intefaces;
+﻿using DevIO.Api.Data;
+using DevIO.Business.Intefaces;
 using DevIO.Business.Notificacoes;
 using DevIO.Business.Services;
 using DevIO.Data.Context;

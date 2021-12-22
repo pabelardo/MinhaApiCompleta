@@ -5,23 +5,30 @@ using AutoMapper;
 using DevIO.Api.DTO;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevIO.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class FornecedoresController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IFornecedorService _fornecedorService;
+        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IMapper _mapper;
 
         public FornecedoresController(IFornecedorRepository fornecedorRepository,
-                                      IMapper mapper, IFornecedorService fornecedorService)
+                                      IMapper mapper,
+                                      IFornecedorService fornecedorService,
+                                      INotificador notificador, 
+                                      IEnderecoRepository enderecoRepository) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _fornecedorService = fornecedorService;
             _mapper = mapper;
+            _enderecoRepository = enderecoRepository;
         }
 
         [HttpGet]
@@ -47,70 +54,67 @@ namespace DevIO.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Adicionar(FornecedorDTO fornecedorDto)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDto); //Eu quero um fornecedor da entidade da classe de negócios e eu vou mapear do request que eu recebi
-
+            //Eu quero um fornecedor da entidade da classe de negócios e eu vou mapear do request que eu recebi
             //Preciso chamar o serviço, pois o mesmo grava as informações do banco.
             //Só devo chamar o repositório caso queira buscar algum dado no banco.
 
-            var adicionouNoBanco = await _fornecedorService.Adicionar(fornecedor);
+            await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorDto));
 
-            if (!adicionouNoBanco) return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedorDto);
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Atualizar(Guid id, FornecedorDTO fornecedorDto)
         {
-            if (id != fornecedorDto.Id) return BadRequest();
+            if (id != fornecedorDto.Id)
+            {
+                NotificarErro("O id informado não é o mesmo que foi passado na query.");
+                return CustomResponse(fornecedorDto);
 
-            if (!ModelState.IsValid) return BadRequest();
+            }
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDto); //Eu quero um fornecedor da entidade da classe de negócios e eu vou mapear do request que eu recebi
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
 
-            //Preciso chamar o serviço, pois o mesmo grava as informações do banco.
-            //Só devo chamar o repositório caso queira buscar algum dado no banco.
+            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorDto));
 
-            var atualizouNoBanco = await _fornecedorService.Atualizar(fornecedor);
-
-            if (!atualizouNoBanco) return BadRequest();
-
-            return Ok(fornecedor);
-        }
-
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<FornecedorDTO>> AtualizarEndereco(Guid id, EnderecoDTO enderecoDto)
-        {
-            if (id != enderecoDto.Id) return BadRequest();
-
-            if (!ModelState.IsValid) return BadRequest();
-
-            var enderecoFornecedor = _mapper.Map<Endereco>(enderecoDto); //Eu quero um fornecedor da entidade da classe de negócios e eu vou mapear do request que eu recebi
-
-            //Preciso chamar o serviço, pois o mesmo grava as informações do banco.
-            //Só devo chamar o repositório caso queira buscar algum dado no banco.
-
-            var atualizouNoBanco = await _fornecedorService.AtualizarEndereco(enderecoFornecedor);
-
-            if (!atualizouNoBanco) return BadRequest();
-
-            return Ok(enderecoFornecedor);
+            return CustomResponse(fornecedorDto);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Excluir(Guid id)
         {
-            var fornecedor = await ObterFornecedorEndereco(id);
+            var fornecedorDto = await ObterFornecedorEndereco(id);
 
-            if (fornecedor == null) return NotFound();
+            if (fornecedorDto == null) return NotFound();
 
-            var removeuDoBanco = await _fornecedorService.Remover(id);
+            await _fornecedorService.Remover(id);
 
-            if (!removeuDoBanco) return BadRequest();
+            return CustomResponse();
+        }
 
-            return Ok(fornecedor);
+        [HttpGet("obter-endereco/{id:guid}")]
+        public async Task<EnderecoDTO> ObterEnderecoPorId(Guid id)
+        {
+            return _mapper.Map<EnderecoDTO>(await _enderecoRepository.ObterPorId(id));
+        }
+
+        [HttpPut("atualizar-endereco/{id:guid}")]
+        public async Task<IActionResult> AtualizarEndereco(Guid id, EnderecoDTO enderecoDto)
+        {
+            if (id != enderecoDto.Id)
+            {
+                NotificarErro("O id informado não é o mesmo que foi passado na query.");
+                return CustomResponse(enderecoDto);
+
+            }
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            await _fornecedorService.AtualizarEndereco(_mapper.Map<Endereco>(enderecoDto));
+
+            return CustomResponse(enderecoDto);
         }
 
         public async Task<FornecedorDTO> ObterFornecedorProdutosEndereco(Guid id)
