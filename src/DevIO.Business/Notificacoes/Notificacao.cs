@@ -1,12 +1,11 @@
-﻿namespace DevIO.Business.Notificacoes
-{
-    public class Notificacao
-    {
-        public Notificacao(string mensagem)
-        {
-            Mensagem = mensagem;
-        }
+﻿namespace DevIO.Business.Notificacoes;
 
-        public string Mensagem { get; }
+public class Notificacao
+{
+    public Notificacao(string mensagem)
+    {
+        Mensagem = mensagem;
     }
+
+    public string Mensagem { get; }
 }

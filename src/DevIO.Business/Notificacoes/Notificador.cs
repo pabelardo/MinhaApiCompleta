@@ -2,30 +2,29 @@
 using System.Linq;
 using DevIO.Business.Intefaces;
 
-namespace DevIO.Business.Notificacoes
+namespace DevIO.Business.Notificacoes;
+
+public class Notificador : INotificador
 {
-    public class Notificador : INotificador
+    private readonly List<Notificacao> _notificacoes;
+
+    public Notificador()
     {
-        private List<Notificacao> _notificacoes;
+        _notificacoes = new List<Notificacao>();
+    }
 
-        public Notificador()
-        {
-            _notificacoes = new List<Notificacao>();
-        }
+    public void Handle(Notificacao notificacao)
+    {
+        _notificacoes.Add(notificacao);
+    }
 
-        public void Handle(Notificacao notificacao)
-        {
-            _notificacoes.Add(notificacao);
-        }
+    public List<Notificacao> ObterNotificacoes()
+    {
+        return _notificacoes;
+    }
 
-        public List<Notificacao> ObterNotificacoes()
-        {
-            return _notificacoes;
-        }
-
-        public bool TemNotificacao()
-        {
-            return _notificacoes.Any();
-        }
+    public bool TemNotificacao()
+    {
+        return _notificacoes.Any();
     }
 }

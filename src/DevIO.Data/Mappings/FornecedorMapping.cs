@@ -2,32 +2,39 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DevIO.Data.Mappings
+namespace DevIO.Data.Mappings;
+
+public class FornecedorMapping : IEntityTypeConfiguration<Fornecedor>
 {
-    public class FornecedorMapping : IEntityTypeConfiguration<Fornecedor>
+    public void Configure(EntityTypeBuilder<Fornecedor> builder)
     {
-        public void Configure(EntityTypeBuilder<Fornecedor> builder)
-        {
-            builder.HasKey(p => p.Id);
+        builder.HasKey(p => p.ID);
 
-            builder.Property(p => p.Nome)
-                .IsRequired()
-                .HasColumnType("varchar(200)");
+        builder.Property(p => p.Nome)
+            .IsRequired()
+            .HasColumnType("varchar(200)")
+            .HasColumnName("NOME");
 
-            builder.Property(p => p.Documento)
-                .IsRequired()
-                .HasColumnType("varchar(14)");
+        builder.Property(p => p.Documento)
+            .IsRequired()
+            .HasColumnType("varchar(14)")
+            .HasColumnName("DOCUMENTO");
 
-            // 1 : 1 => Fornecedor : Endereco
-            builder.HasOne(f => f.Endereco)
-                .WithOne(e => e.Fornecedor);
+        builder.Property(p => p.TipoFornecedor)
+            .HasColumnName("TIPO_FORNECEDOR");
 
-            // 1 : N => Fornecedor : Produtos
-            builder.HasMany(f => f.Produtos)
-                .WithOne(p => p.Fornecedor)
-                .HasForeignKey(p => p.FornecedorId);
+        builder.Property(p => p.Ativo)
+            .HasColumnName("ATIVO");
 
-            builder.ToTable("Fornecedores");
-        }
+        // 1 : 1 => Fornecedor : Endereco
+        builder.HasOne(f => f.Endereco)
+            .WithOne(e => e.Fornecedor);
+
+        // 1 : N => Fornecedor : Produtos
+        builder.HasMany(f => f.Produtos)
+            .WithOne(p => p.Fornecedor)
+            .HasForeignKey(p => p.FornecedorId);
+
+        builder.ToTable("FORNECEDORES");
     }
 }

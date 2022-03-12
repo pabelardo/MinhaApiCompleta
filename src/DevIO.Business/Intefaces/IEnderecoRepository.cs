@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using DevIO.Business.Models;
 
-namespace DevIO.Business.Intefaces
+namespace DevIO.Business.Intefaces;
+
+public interface IEnderecoRepository : IRepository<Endereco>
 {
-    public interface IEnderecoRepository : IRepository<Endereco>
-    {
-        Task<Endereco> ObterEnderecoPorFornecedor(Guid fornecedorId);
-    }
+    Task<Endereco> ObterEnderecoPorFornecedor(Guid fornecedorId);
 }

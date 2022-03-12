@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace DevIO.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
@@ -15,118 +17,164 @@ namespace DevIO.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("DevIO.Business.Models.Endereco", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Bairro")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("BAIRRO");
 
                     b.Property<string>("Cep")
                         .IsRequired()
-                        .HasColumnType("varchar(8)");
+                        .HasColumnType("varchar(8)")
+                        .HasColumnName("CEP");
 
                     b.Property<string>("Cidade")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("CIDADE");
 
                     b.Property<string>("Complemento")
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .HasColumnName("COMPLEMENTO");
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ESTADO");
 
-                    b.Property<Guid>("FornecedorId");
+                    b.Property<Guid>("FornecedorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("FORNECEDOR_ID");
 
                     b.Property<string>("Logradouro")
                         .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("LOGRADOURO");
 
                     b.Property<string>("Numero")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NUMERO");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("FornecedorId")
                         .IsUnique();
 
-                    b.ToTable("Enderecos");
+                    b.ToTable("ENDERECOS", (string)null);
                 });
 
             modelBuilder.Entity("DevIO.Business.Models.Fornecedor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit")
+                        .HasColumnName("ATIVO");
 
                     b.Property<string>("Documento")
                         .IsRequired()
-                        .HasColumnType("varchar(14)");
+                        .HasColumnType("varchar(14)")
+                        .HasColumnName("DOCUMENTO");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("NOME");
 
-                    b.Property<int>("TipoFornecedor");
+                    b.Property<int>("TipoFornecedor")
+                        .HasColumnType("int")
+                        .HasColumnName("TIPO_FORNECEDOR");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
-                    b.ToTable("Fornecedores");
+                    b.ToTable("FORNECEDORES", (string)null);
                 });
 
             modelBuilder.Entity("DevIO.Business.Models.Produto", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Ativo");
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit")
+                        .HasColumnName("ATIVO");
 
-                    b.Property<DateTime>("DataCadastro");
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATA_CADASTRO");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("varchar(1000)");
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("DESCRICAO");
 
-                    b.Property<Guid>("FornecedorId");
+                    b.Property<Guid>("FornecedorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("FORNECEDOR_ID");
 
                     b.Property<string>("Imagem")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("IMAGEM");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("NOME");
 
-                    b.Property<decimal>("Valor");
+                    b.Property<decimal>("Valor")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("VALOR");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("FornecedorId");
 
-                    b.ToTable("Produtos");
+                    b.ToTable("PRODUTOS", (string)null);
                 });
 
             modelBuilder.Entity("DevIO.Business.Models.Endereco", b =>
                 {
                     b.HasOne("DevIO.Business.Models.Fornecedor", "Fornecedor")
                         .WithOne("Endereco")
-                        .HasForeignKey("DevIO.Business.Models.Endereco", "FornecedorId");
+                        .HasForeignKey("DevIO.Business.Models.Endereco", "FornecedorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Fornecedor");
                 });
 
             modelBuilder.Entity("DevIO.Business.Models.Produto", b =>
                 {
                     b.HasOne("DevIO.Business.Models.Fornecedor", "Fornecedor")
                         .WithMany("Produtos")
-                        .HasForeignKey("FornecedorId");
+                        .HasForeignKey("FornecedorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Fornecedor");
+                });
+
+            modelBuilder.Entity("DevIO.Business.Models.Fornecedor", b =>
+                {
+                    b.Navigation("Endereco");
+
+                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }
