@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using DevIO.Business.Notificacoes;
 
-namespace DevIO.Business.Intefaces
+namespace DevIO.Business.Intefaces;
+
+public interface INotificador
 {
-    public interface INotificador
-    {
-        bool TemNotificacao();
-        List<Notificacao> ObterNotificacoes();
-        void Handle(Notificacao notificacao);
-    }
+    bool TemNotificacao();
+    List<Notificacao> ObterNotificacoes();
+    void Handle(Notificacao notificacao);
 }

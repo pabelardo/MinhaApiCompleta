@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevIO.Business", "src\DevIO.Business\DevIO.Business.csproj", "{52B146C4-8F42-48F4-A8CA-A4F5AD262DD7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevIO.Data", "src\DevIO.Data\DevIO.Data.csproj", "{E72B43B6-D668-4308-BAB9-F23BE53B208D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevIO.Api", "src\DevIO.Api\DevIO.Api.csproj", "{417C8440-39FF-487B-9ECA-B6B5E0FA370D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{0EDE0285-A346-4FBA-B167-2DBE1C74B16D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{00BA8122-1691-4995-91A0-9EC74C9824D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infra", "3 - Infra", "{3C93E12B-AD01-493D-A99D-DAC6B14D4E14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +64,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52B146C4-8F42-48F4-A8CA-A4F5AD262DD7} = {00BA8122-1691-4995-91A0-9EC74C9824D8}
+		{E72B43B6-D668-4308-BAB9-F23BE53B208D} = {3C93E12B-AD01-493D-A99D-DAC6B14D4E14}
+		{417C8440-39FF-487B-9ECA-B6B5E0FA370D} = {0EDE0285-A346-4FBA-B167-2DBE1C74B16D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6682B8C8-2006-4B8B-8B43-C8A0164CDD9F}

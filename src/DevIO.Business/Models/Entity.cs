@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace DevIO.Business.Models
-{
-    public abstract class Entity
-    {
-        protected Entity()
-        {
-            Id = Guid.NewGuid();
-        }
+namespace DevIO.Business.Models;
 
-        public Guid Id { get; set; }
+public abstract class Entity
+{
+    protected Entity()
+    {
+        ID = Guid.NewGuid();
     }
+
+    public Guid ID { get; set; }
 }
